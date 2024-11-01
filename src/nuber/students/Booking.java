@@ -49,6 +49,11 @@ public class Booking implements Callable<BookingResult> {
 		
 	}
 	
+	public Driver getCurrentDriver() {
+        return currentDriver;
+    }
+	
+	
 	/**
 	 * At some point, the Nuber Region responsible for the booking can start it (has free spot),
 	 * and calls the Booking.call() function, which:
@@ -100,6 +105,10 @@ public class Booking implements Callable<BookingResult> {
 	@Override
 	public String toString()
 	{
+		 String driverName = (currentDriver != null) ? currentDriver.getName() : "null";
+		 String passengerName = (passenger != null) ? passenger.getName() : "null";
+
+		 return jobId + ":" + driverName + ":" + passengerName;
 	}
 
 
