@@ -6,6 +6,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 /**
  * A single Nuber region that operates independently of other regions, other than getting 
  * drivers from bookings from the central dispatch.
@@ -61,7 +63,39 @@ public class NuberRegion {
 	 * @return a Future that will provide the final BookingResult object from the completed booking
 	 */
 	public Future<BookingResult> bookPassenger(Passenger waitingPassenger)
-	{		
+	{
+		if (isShutdown.get()) {
+            System.out.println("Region " + regionName + " is shut down. Booking rejected.");
+            return null;
+        }
+        
+        Booking booking = new Booking(dispatch, waitingPassenger);
+        dispatch.logEvent(booking, "Booking created, awaiting driver availability");
+
+        bookingQueue.add(booking);
+
+        return executorService.submit(new BookingTask(booking));
+    }
+
+    private class BookingTask implements Callable<BookingResult> {
+        private Booking booking;
+
+        BookingTask(Booking booking) {
+            this.booking = booking;
+        }
+
+        @Override
+        public BookingResult call() throws Exception {
+            try {
+                Driver driver = dispatch.getDriver();
+                booking.setDriver(driver);
+                dispatch.logEvent(booking, "Driver assigned, starting journey");
+                return booking.call();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                throw new ExecutionException("Booking interrupted", e);
+            }
+        }
 	}
 	
 	/**
