@@ -7,7 +7,40 @@ public class Driver extends Person {
 	public Driver(String driverName, int maxSleep)
 	{
 		super(driverName, maxSleep);
+		this.currentPassenger = null;
 	}
+	
+	
+	
+	public Passenger getCurrentPassenger() {
+	    return currentPassenger;
+	    }
+
+	public void setCurrentPassenger(Passenger currentPassenger) {
+	    this.currentPassenger = currentPassenger;
+	    }
+	
+	
+	
+	private void delay() {
+		long actualDelay;
+		
+		try {
+		// thread to sleep for random milliseconds
+		actualDelay = randomWithRange(0,this.maxSleep);
+		Thread.sleep(actualDelay);
+		} catch (Exception e) {
+		
+			System.out.println(e);
+			
+			}
+		}
+
+		private long randomWithRange(long min, long max){
+			
+			long range = (max - min) + 1;
+			return (long)(Math.random() * range) + min;
+		}
 	
 	/**
 	 * Stores the provided passenger as the driver's current passenger and then
@@ -18,8 +51,7 @@ public class Driver extends Person {
 	 */
 	public void pickUpPassenger(Passenger newPassenger) throws InterruptedException {
 		 this.currentPassenger = newPassenger; 
-	     int delay = (int) (Math.random() * maxSleep); 
-	     Thread.sleep(delay); 
+		 this.delay();
 	}
 
 	/**
@@ -30,10 +62,15 @@ public class Driver extends Person {
 	 */
 	public void driveToDestination() throws InterruptedException {
 		if (currentPassenger != null) {
-            int travelTime = currentPassenger.getTravelTime();
+            long travelTime = currentPassenger.getTravelTime();
             Thread.sleep(travelTime);
         }
 		
+	}
+	
+	@Override
+	public String toString() {
+	    return "Driver [name=" + name + "]";
 	}
 	
 }
