@@ -63,7 +63,9 @@ public class Booking implements Callable<BookingResult> {
 	 * @return A BookingResult containing the final information about the booking 
 	 */
 	public BookingResult call() throws InterruptedException {
-		
+		Driver driver = dispatch.getDriver();
+	    this.currentDriver = driver;
+	    
 		return null;
 
 	}
