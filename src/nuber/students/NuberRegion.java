@@ -103,12 +103,14 @@ public class NuberRegion {
 	 */
 	public void shutdown()
 	{
+		 isShutdown.set(true);
+	     executorService.shutdown();
+	     System.out.println("Region " + regionName + " is now shutting down");
 		
 	}
 
 	public boolean isShutdown() {
-		// TODO Auto-generated method stub
-		return false;
+		return isShutdown.get();
 	}
 		
 }
