@@ -76,7 +76,7 @@ public class NuberDispatch {
 	 * 
 	 * @return A driver that has been removed from the queue
 	 */
-	public Driver getDriver()
+	public Driver getDriver() throws InterruptedException 
 	{
 		bookingsAwaitingDriver.acquire();  
         Driver driver = idleDrivers.poll();
