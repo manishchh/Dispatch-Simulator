@@ -77,6 +77,12 @@ public class NuberDispatch {
 	 */
 	public Driver getDriver()
 	{
+		bookingsAwaitingDriver.acquire();  
+        Driver driver = idleDrivers.poll();
+        if (driver == null && logEvents) {
+            System.out.println("No available drivers");
+        }
+        return driver;
 	}
 
 	/**
