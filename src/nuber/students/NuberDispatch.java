@@ -61,6 +61,11 @@ public class NuberDispatch {
 	 */
 	public boolean addDriver(Driver newDriver)
 	{
+		 boolean added = idleDrivers.offer(newDriver); // Non-blocking add
+	     if (!added && logEvents) {
+	    	 System.out.println("Driver not added: Queue is full");
+	     }
+	     return added;
 	}
 	
 	/**
