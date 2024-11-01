@@ -140,12 +140,14 @@ public class NuberDispatch {
 	 */
 	public int getBookingsAwaitingDriver()
 	{
+		return bookingsAwaitingDriver.availablePermits();
 	}
 	
 	/**
 	 * Tells all regions to finish existing bookings already allocated, and stop accepting new bookings
 	 */
 	public void shutdown() {
+		regionMap.values().forEach(NuberRegion::shutdown);
 	}
 
 }
