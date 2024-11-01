@@ -4,6 +4,8 @@ import java.util.concurrent.Future;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 /**
  * A single Nuber region that operates independently of other regions, other than getting 
  * drivers from bookings from the central dispatch.
@@ -23,8 +25,9 @@ public class NuberRegion {
 	NuberDispatch dispatch;
     String regionName;
     int maxSimultaneousJobs;
-    private BlockingQueue<Booking> bookingQueue;
-    private AtomicBoolean isShutdown;
+    BlockingQueue<Booking> bookingQueue;
+    AtomicBoolean isShutdown;
+    ExecutorService executorService;
 	
 	/**
 	 * Creates a new Nuber region
@@ -38,6 +41,7 @@ public class NuberRegion {
 		 this.dispatch = dispatch;
 	     this.regionName = regionName;
 	     this.maxSimultaneousJobs = maxSimultaneousJobs;
+	     this.executorService = Executors.newFixedThreadPool(maxSimultaneousJobs);
 	     this.isShutdown = new AtomicBoolean(false);
 	     this.bookingQueue = new LinkedBlockingQueue<>();
 	     this.bookingQueue = new LinkedBlockingQueue<>();
