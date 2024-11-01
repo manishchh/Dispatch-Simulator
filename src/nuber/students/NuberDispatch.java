@@ -5,6 +5,7 @@ import java.util.concurrent.Future;
 import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.ExecutionException;
 
 /**
  * The core Dispatch class that instantiates and manages everything for Nuber
@@ -112,7 +113,22 @@ public class NuberDispatch {
 	 * @param region The region to book them into
 	 * @return returns a Future<BookingResult> object
 	 */
-	public Future<BookingResult> bookPassenger(Passenger passenger, String region) {
+	public Future<BookingResult> bookPassenger(Passenger passenger, String region) throws InterruptedException, ExecutionException {
+		
+		NuberRegion targetRegion = regionMap.get(region);
+		
+		if (targetRegion == null) {
+            if (logEvents) System.out.println("Invalid region specified: " + region);
+            return null;
+        }
+
+        if (targetRegion.isShutdown()) {
+            if (logEvents) System.out.println("Region " + region + " is shut down. Booking rejected");
+            return null;
+        }
+
+        bookingsAwaitingDriver.release();  
+        return targetRegion.bookPassenger(passenger);
 	}
 
 	/**
