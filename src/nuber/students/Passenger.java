@@ -11,5 +11,10 @@ public class Passenger extends Person
 	{
 		return (int)(Math.random() * maxSleep);
 	}
+	
+	@Override
+	public String toString() {
+		return "Passenger [name=" + name + "]";
+	}
 
 }

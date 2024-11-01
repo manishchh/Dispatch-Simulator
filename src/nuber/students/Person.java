@@ -20,5 +20,14 @@ public abstract class Person
 		
 		return SAMPLE_NAMES[nextNameIndex];
 	}
+	
+	@Override
+	public String toString() {
+		return "Person [name=" + name + "]";
+	}
+
+	public String getName() {
+		return name;
+	}
 
 }
