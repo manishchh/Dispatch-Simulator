@@ -24,7 +24,6 @@ public class NuberDispatch {
 	
 	//Map to store region by name
 	private Map<String, NuberRegion> regionMap;
-	
 	private Semaphore bookingsAwaitingDriver;
 
 	
