@@ -2,6 +2,9 @@ package nuber.students;
 
 import java.util.HashMap;
 import java.util.concurrent.Future;
+import java.util.Map;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.Semaphore;
 
 /**
  * The core Dispatch class that instantiates and manages everything for Nuber
@@ -17,6 +20,13 @@ public class NuberDispatch {
 	private final int MAX_DRIVERS = 999;
 	
 	private boolean logEvents = false;
+	private LinkedBlockingQueue<Driver> idleDrivers;
+	
+	//Map to store region by name
+	private Map<String, NuberRegion> regionMap;
+	
+	private Semaphore bookingsAwaitingDriver;
+
 	
 	/**
 	 * Creates a new dispatch objects and instantiates the required regions and any other objects required.
@@ -27,6 +37,19 @@ public class NuberDispatch {
 	 */
 	public NuberDispatch(HashMap<String, Integer> regionInfo, boolean logEvents)
 	{
+		 this.logEvents = logEvents;
+	     this.idleDrivers = new LinkedBlockingQueue<>(MAX_DRIVERS);
+	     this.regionMap = new HashMap<>();
+	     this.bookingsAwaitingDriver = new Semaphore(0);
+	     
+	     for (Map.Entry<String, Integer> entry : regionInfo.entrySet()) {
+	    	 
+	         String regionName = entry.getKey();
+	         int maxBookings = entry.getValue();
+	         NuberRegion region = new NuberRegion(this, regionName, maxBookings);
+	         regionMap.put(regionName, region);
+	        }
+	     
 	}
 	
 	/**
