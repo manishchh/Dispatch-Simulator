@@ -1,7 +1,7 @@
 package nuber.students;
 
 import java.util.concurrent.atomic.AtomicInteger;
-
+import java.util.concurrent.Callable;
 
 /**
  * 
@@ -21,7 +21,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author james
  *
  */
-public class Booking {
+public class Booking implements Callable<BookingResult> {
 	
 	private static final AtomicInteger count = new AtomicInteger(0);
     private NuberDispatch dispatch;
@@ -62,7 +62,9 @@ public class Booking {
 	 *
 	 * @return A BookingResult containing the final information about the booking 
 	 */
-	public BookingResult call() {
+	public BookingResult call() throws InterruptedException {
+		
+		return null;
 
 	}
 	
