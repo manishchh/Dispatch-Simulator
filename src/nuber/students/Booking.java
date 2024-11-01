@@ -2,6 +2,8 @@ package nuber.students;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.Callable;
+import java.time.Duration;
+import java.time.LocalTime;
 
 /**
  * 
@@ -28,6 +30,7 @@ public class Booking implements Callable<BookingResult> {
     private Passenger passenger;
     private int jobId;	
 	private Driver currentDriver;
+	private LocalTime bookedTime;
 
 
 	/**
@@ -73,7 +76,14 @@ public class Booking implements Callable<BookingResult> {
 	    dispatch.logEvent(this, "Collected passenger, on way to destination");
 	    driver.driveToDestination();
 	    
-		return null;
+	    
+	    LocalTime arrivalTime = LocalTime.now();
+	    long tripDuration = Duration.between(bookedTime, arrivalTime).toMillis();
+
+	    dispatch.logEvent(this, "At destination, driver is now free");
+	    dispatch.addDriver(driver);
+	    
+		return new BookingResult(jobId, passenger, driver, tripDuration);
 
 	}
 	
