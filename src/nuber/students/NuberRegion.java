@@ -1,7 +1,9 @@
 package nuber.students;
 
 import java.util.concurrent.Future;
-
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * A single Nuber region that operates independently of other regions, other than getting 
  * drivers from bookings from the central dispatch.
@@ -17,7 +19,12 @@ import java.util.concurrent.Future;
  *
  */
 public class NuberRegion {
-
+	
+	NuberDispatch dispatch;
+    String regionName;
+    int maxSimultaneousJobs;
+    private BlockingQueue<Booking> bookingQueue;
+    private AtomicBoolean isShutdown;
 	
 	/**
 	 * Creates a new Nuber region
@@ -28,7 +35,13 @@ public class NuberRegion {
 	 */
 	public NuberRegion(NuberDispatch dispatch, String regionName, int maxSimultaneousJobs)
 	{
-		
+		 this.dispatch = dispatch;
+	     this.regionName = regionName;
+	     this.maxSimultaneousJobs = maxSimultaneousJobs;
+	     this.isShutdown = new AtomicBoolean(false);
+	     this.bookingQueue = new LinkedBlockingQueue<>();
+	     this.bookingQueue = new LinkedBlockingQueue<>();
+	     this.isShutdown = new AtomicBoolean(false);
 
 	}
 	
@@ -45,7 +58,6 @@ public class NuberRegion {
 	 */
 	public Future<BookingResult> bookPassenger(Passenger waitingPassenger)
 	{		
-		
 	}
 	
 	/**
@@ -53,6 +65,12 @@ public class NuberRegion {
 	 */
 	public void shutdown()
 	{
+		
+	}
+
+	public boolean isShutdown() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 		
 }
