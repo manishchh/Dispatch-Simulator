@@ -66,6 +66,13 @@ public class Booking implements Callable<BookingResult> {
 		Driver driver = dispatch.getDriver();
 	    this.currentDriver = driver;
 	    
+	    
+	    dispatch.logEvent(this, "Starting, on way to passenger");
+	    driver.pickUpPassenger(this.passenger);
+
+	    dispatch.logEvent(this, "Collected passenger, on way to destination");
+	    driver.driveToDestination();
+	    
 		return null;
 
 	}
